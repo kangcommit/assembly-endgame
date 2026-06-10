@@ -1,11 +1,20 @@
+import clsx from "clsx";
 import React, { type JSX } from "react";
 import Header from "./Header";
 import { languages } from "./languages";
 
 function App(): JSX.Element {
-	const [currentWord, setCurrentWord] = React.useState<string>("React");
+	const [currentWord, setCurrentWord] = React.useState<string>("react");
 
+	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
+	console.log(guessedLetters);
 	const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+	function addGuessedLetter(letter: string): void {
+		setGuessedLetters((prevLetters) =>
+			prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
+		);
+	}
 
 	const languageElements = languages.map((language): JSX.Element => {
 		const styles = {
@@ -31,22 +40,34 @@ function App(): JSX.Element {
 				key={index}
 				className="flex h-10 w-10 items-center justify-center border-b border-b-[#F9F4DA] bg-[#323232] font-bold text-[#F9F4DA] text-lg uppercase"
 			>
-				{char}
+				{guessedLetters.includes(char) ? char : ""}
 			</span>
 		),
 	);
 
-	const keyboardElement = alphabet.split("").map(
-		(letter): JSX.Element => (
+	const keyboardElement = alphabet.split("").map((letter): JSX.Element => {
+		const isGuessed = guessedLetters.includes(letter);
+		const isCorrect = isGuessed && currentWord.includes(letter);
+		const isWrong = isGuessed && !currentWord.includes(letter);
+
+		return (
 			<button
 				key={letter}
 				type="button"
-				className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm border border-[#D7D7D7] bg-[#FCBA29] font-semibold text-[#1E1E1E] uppercase"
+				onClick={() => addGuessedLetter(letter)}
+				className={clsx(
+					"flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm border border-[#D7D7D7] font-semibold text-[#1E1E1E] uppercase",
+					isCorrect
+						? "bg-[#10A95B]"
+						: isWrong
+							? "bg-[#EC5D49]"
+							: "bg-[#FCBA29]",
+				)}
 			>
 				{letter}
 			</button>
-		),
-	);
+		);
+	});
 
 	return (
 		<main className="flex flex-col items-center gap-9">
