@@ -1,22 +1,34 @@
-# React + TypeScript + Vite Template
+# Word Guessing Game
 
-A modern React template with TypeScript, Vite, Tailwind CSS v4, and Biome for linting.
+A fun and interactive word guessing game built with React, TypeScript, and Tailwind CSS. Guess the hidden word by selecting letters before you run out of attempts!
 
-## Features
+## 🎮 Features
 
-- ⚡️ [Vite](https://vite.dev/) - Next generation frontend tooling
-- ⚛️ [React](https://react.dev/) - UI library
-- 📘 [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript
-- 🎨 [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS
-- 🔧 [Biome](https://biomejs.dev/) - Fast linter and formatter
-- 🪝 [simple-git-hooks](https://github.com/toplenordr/simple-git-hooks) - Git hooks
-- 📝 [lint-staged](https://github.com/lint-staged/lint-staged) - Run linters on staged files
+- **Random Word Selection**: Words are randomly selected from a extensive vocabulary list
+- **Visual Feedback**: 
+  - Confetti celebration on winning
+  - Visual language chips showing wrong guesses
+- **Interactive Keyboard**: Easy-to-use on-screen keyboard for letter selection
+- **Game States**: Clear status indicators for win/loss conditions
+- **New Game**: Start a fresh game at any time
+- **Responsive Design**: Works on desktop and mobile devices
 
-## Getting Started
+## 🛠️ Tech Stack
 
-1. Update the `name` in `package.json` with your project name
-2. Update the `title` in `index.html`
-3. Optional: Update the `version` in `package.json`
+- **React** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **Biome** - Linting and formatting
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended)
+
+### Installation
 
 ```bash
 # Install dependencies
@@ -24,50 +36,47 @@ pnpm install
 
 # Start development server
 pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-
-# Run lint check
-pnpm check
-
-# Fix lint issues automatically
-pnpm check:fix
 ```
 
-## Project Structure
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server |
+| `pnpm build` | Build for production |
+| `pnpm preview` | Preview production build |
+| `pnpm check` | Run linting and type checking |
+| `pnpm check:fix` | Auto-fix linting issues |
+
+## 🎯 How to Play
+
+1. A random word is selected and displayed as blank letters
+2. Click letters on the keyboard to guess
+3. Correct guesses reveal the letter in the word
+4. Wrong guesses add a language chip (like Hangman)
+5. Win by guessing all letters before running out of attempts!
+6. Click "New Game" to play again
+
+## 📁 Project Structure
 
 ```
 src/
-├── main.tsx       # Entry point
-├── App.tsx        # Main app component
-├── style.css      # Global styles (Tailwind)
-└── assets/        # Static assets
+├── App.tsx              # Main application component
+├── main.tsx             # Application entry point
+├── components/          # React components
+│   ├── ConfettiContainer.tsx
+│   ├── GameStatus.tsx
+│   ├── Header.tsx
+│   ├── Keyboard.tsx
+│   ├── LanguageChips.tsx
+│   ├── NewGameButton.tsx
+│   └── WordLetter.tsx
+├── languages.ts         # Language configuration
+├── utils.ts             # Utility functions
+├── words.ts             # Word list
+└── style.css            # Global styles
 ```
 
-## Tools
+## 📄 License
 
-### Vite Plugins
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) - Uses [Oxc](https://oxc.rs) for fast React HMR
-
-### Linting & Formatting
-
-This project uses [Biome](https://biomejs.dev/) instead of ESLint/Prettier for better performance:
-
-```bash
-# Check files
-pnpm check
-
-# Fix issues
-pnpm check:fix
-```
-
-Configuration is in `biome.json`.
-
-### Git Hooks
-
-Pre-commit hooks are automatically set up via `simple-git-hooks` and `lint-staged`. Before each commit, staged files will be automatically formatted and linted.
+MIT
