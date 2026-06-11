@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { JSX } from "react";
-import { languages } from "../languages";
+import { type Language, languages } from "../languages";
 
 function LanguageChips({
 	wrongGuessCount,
@@ -8,9 +8,9 @@ function LanguageChips({
 	wrongGuessCount: number;
 }): JSX.Element {
 	const languageElements = languages.map((language, index): JSX.Element => {
-		const isLanguageLost = index < wrongGuessCount;
+		const isLanguageLost: boolean = index < wrongGuessCount;
 
-		const styles = {
+		const styles: Omit<Language, "name"> = {
 			backgroundColor: language.backgroundColor,
 			color: language.color,
 		};
