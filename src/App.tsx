@@ -1,8 +1,8 @@
-import clsx from "clsx";
 import React, { type JSX } from "react";
 import ConfettiContainer from "./components/ConfettiContainer";
 import GameStatus from "./components/GameStatus";
 import Header from "./components/Header";
+import Keyboard from "./components/Keyboard";
 import LanguageChips from "./components/LanguageChips";
 import WordLetter from "./components/WordLetter";
 import { languages } from "./languages";
@@ -26,39 +26,11 @@ function App(): JSX.Element {
 	const isLastGuessIncorrect: boolean | string =
 		lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
-	// Static values
-	const alphabet: string = "abcdefghijklmnopqrstuvwxyz";
-
 	function addGuessedLetter(letter: string): void {
 		setGuessedLetters((prevLetters) =>
 			prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
 		);
 	}
-
-	const keyboardElement = alphabet.split("").map((letter): JSX.Element => {
-		const isGuessed = guessedLetters.includes(letter);
-		const isCorrect = isGuessed && currentWord.includes(letter);
-		const isWrong = isGuessed && !currentWord.includes(letter);
-
-		return (
-			<button
-				key={letter}
-				type="button"
-				disabled={isGameOver}
-				onClick={() => addGuessedLetter(letter)}
-				className={clsx(
-					"flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm border border-[#D7D7D7] font-semibold text-[#1E1E1E] uppercase disabled:cursor-not-allowed disabled:opacity-50",
-					isCorrect
-						? "bg-[#10A95B]"
-						: isWrong
-							? "bg-[#EC5D49]"
-							: "bg-[#FCBA29]",
-				)}
-			>
-				{letter}
-			</button>
-		);
-	});
 
 	function startNewGame(): void {
 		setCurrentWord(getRandomWord());
@@ -85,9 +57,13 @@ function App(): JSX.Element {
 				isGameLost={isGameLost}
 			/>
 
-			<section className="flex max-w-120 flex-wrap justify-center gap-2">
-				{keyboardElement}
-			</section>
+			<Keyboard
+				guessedLetters={guessedLetters}
+				currentWord={currentWord}
+				isGameOver={isGameOver}
+				addGuessedLetter={addGuessedLetter}
+			/>
+
 			{isGameOver && (
 				<button
 					type="button"
