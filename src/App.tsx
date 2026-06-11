@@ -4,6 +4,7 @@ import ConfettiContainer from "./components/ConfettiContainer";
 import GameStatus from "./components/GameStatus";
 import Header from "./components/Header";
 import LanguageChips from "./components/LanguageChips";
+import WordLetter from "./components/WordLetter";
 import { languages } from "./languages";
 import { getRandomWord } from "./utils";
 
@@ -30,48 +31,6 @@ function App(): JSX.Element {
 			prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
 		);
 	}
-
-	const languageElements = languages.map((language, index): JSX.Element => {
-		const isLanguageLost = index < wrongGuessCount;
-
-		const styles = {
-			backgroundColor: language.backgroundColor,
-			color: language.color,
-		};
-
-		return (
-			<span
-				key={language.name}
-				style={styles}
-				className={clsx(
-					"relative rounded-sm p-1 font-bold text-xs",
-					isLanguageLost &&
-						"before:absolute before:inset-0 before:flex before:items-center before:justify-center before:rounded-[inherit] before:bg-black/70 before:content-['💀']",
-				)}
-			>
-				{language.name}
-			</span>
-		);
-	});
-
-	const letterElements = currentWord.split("").map((char, index) => {
-		const isGuessed = guessedLetters.includes(char);
-		const shouldRevealLetter = isGameLost || isGuessed;
-
-		return (
-			<span
-				// TODO: Consider using a unique identifier for each letter instead of index for keys in production code
-				// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-				key={`${char}-${index}`}
-				className={clsx(
-					"flex h-10 w-10 items-center justify-center border-b border-b-[#F9F4DA] bg-[#323232] font-bold text-lg uppercase",
-					!isGuessed ? "text-[#EC5D49]" : "text-[#F9F4DA]",
-				)}
-			>
-				{shouldRevealLetter ? char : ""}
-			</span>
-		);
-	});
 
 	const keyboardElement = alphabet.split("").map((letter): JSX.Element => {
 		const isGuessed = guessedLetters.includes(letter);
@@ -117,9 +76,12 @@ function App(): JSX.Element {
 
 			<LanguageChips wrongGuessCount={wrongGuessCount} />
 
-			<section className="flex justify-center gap-0.5">
-				{letterElements}
-			</section>
+			<WordLetter
+				currentWord={currentWord}
+				guessedLetters={guessedLetters}
+				isGameLost={isGameLost}
+			/>
+
 			<section className="flex max-w-120 flex-wrap justify-center gap-2">
 				{keyboardElement}
 			</section>
