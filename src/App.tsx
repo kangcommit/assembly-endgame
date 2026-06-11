@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React, { type JSX } from "react";
+import Confetti from "react-confetti";
 import Header from "./Header";
 import { languages } from "./languages";
 import { getFarewellText, getRandomWord } from "./utils";
@@ -8,6 +9,7 @@ function App(): JSX.Element {
 	const [currentWord, setCurrentWord] = React.useState<string>(getRandomWord());
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
 
+	console.log(currentWord);
 	const wrongGuessCount = guessedLetters.filter(
 		(letter: string): boolean => !currentWord.includes(letter),
 	).length;
@@ -141,6 +143,7 @@ function App(): JSX.Element {
 
 	return (
 		<main className="flex flex-col items-center gap-9">
+			{isGameWon && <Confetti recycle={false} numberOfPieces={1000} />}
 			<Header />
 			{renderGameStatus()}
 			<section className="flex max-w-87.5 flex-wrap justify-center gap-0.5">
