@@ -2,10 +2,10 @@ import clsx from "clsx";
 import React, { type JSX } from "react";
 import Header from "./Header";
 import { languages } from "./languages";
-import { getFarewellText } from "./utils";
+import { getFarewellText, getRandomWord } from "./utils";
 
 function App(): JSX.Element {
-	const [currentWord, setCurrentWord] = React.useState<string>("react");
+	const [currentWord, setCurrentWord] = React.useState<string>(getRandomWord());
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
 
 	const wrongGuessCount = guessedLetters.filter(
