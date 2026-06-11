@@ -20,7 +20,7 @@ function App(): JSX.Element {
 	).length;
 	const isGameWon: boolean = currentWord
 		.split("")
-		.every((letter) => guessedLetters.includes(letter));
+		.every((letter: string): boolean => guessedLetters.includes(letter));
 	const isGameLost: boolean = wrongGuessCount >= languages.length - 1;
 	const isGameOver: boolean = isGameWon || isGameLost;
 	const lastGuessedLetter: string = guessedLetters[guessedLetters.length - 1];
@@ -28,7 +28,7 @@ function App(): JSX.Element {
 		lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
 	function addGuessedLetter(letter: string): void {
-		setGuessedLetters((prevLetters) =>
+		setGuessedLetters((prevLetters: string[]): string[] =>
 			prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter],
 		);
 	}
