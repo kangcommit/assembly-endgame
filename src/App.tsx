@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React, { type JSX } from "react";
 import Header from "./Header";
 import { languages } from "./languages";
+import { getFarewellText } from "./utils";
 
 function App(): JSX.Element {
 	const [currentWord, setCurrentWord] = React.useState<string>("react");
@@ -15,6 +16,9 @@ function App(): JSX.Element {
 		.every((letter) => guessedLetters.includes(letter));
 	const isLost = wrongGuessCount >= languages.length - 1;
 	const isGameOver = isGameWon || isLost;
+	const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
+	const isLastGuessIncorrect =
+		lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
 	const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -84,28 +88,49 @@ function App(): JSX.Element {
 		);
 	});
 
-	return (
-		<main className="flex flex-col items-center gap-9">
-			<Header />
-			<section
-				className={clsx(
-					"flex h-15 w-full max-w-87.5 flex-col items-center justify-center rounded-sm",
-					!isGameOver ? "" : isGameWon ? "bg-[#10A95B]" : "bg-[#BA2A2A]",
-				)}
-			>
+	function renderGameStatus(): JSX.Element {
+		const sectionClass = clsx(
+			"flex h-15 w-full max-w-87.5 flex-col items-center justify-center rounded-sm",
+			isLastGuessIncorrect
+				? "border border-[#323232] border-dashed bg-[#7A5EA7]"
+				: !isGameOver
+					? ""
+					: isGameWon
+						? "bg-[#10A95B]"
+						: "bg-[#BA2A2A]",
+		);
+
+		const paragraphClassName = clsx(
+			"font-medium text-[#F9F4DA]",
+			isLastGuessIncorrect && "italic",
+		);
+
+		return (
+			<section className={sectionClass}>
 				{isGameOver ? (
 					<>
 						<h2 className="font-medium text-[#F9F4DA] text-xl">
 							{isGameWon ? "You Win!" : "Game over!"}
 						</h2>
-						<p className="font-medium text-[#F9F4DA]">
+						<p className={paragraphClassName}>
 							{isGameWon
 								? "Well done! 🎉"
 								: "You lose! Better start learning Assembly 😭"}
 						</p>
 					</>
+				) : isLastGuessIncorrect ? (
+					<p className={paragraphClassName}>
+						"{getFarewellText(lastGuessedLetter)}"
+					</p>
 				) : null}
 			</section>
+		);
+	}
+
+	return (
+		<main className="flex flex-col items-center gap-9">
+			<Header />
+			{renderGameStatus()}
 			<section className="flex max-w-87.5 flex-wrap justify-center gap-0.5">
 				{languageElements}
 			</section>
