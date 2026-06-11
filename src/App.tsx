@@ -1,15 +1,15 @@
 import clsx from "clsx";
 import React, { type JSX } from "react";
 import Confetti from "react-confetti";
+import GameStatus from "./components/GameStatus";
 import Header from "./components/Header";
 import { languages } from "./languages";
-import { getFarewellText, getRandomWord } from "./utils";
+import { getRandomWord } from "./utils";
 
 function App(): JSX.Element {
 	const [currentWord, setCurrentWord] = React.useState<string>(getRandomWord());
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
 
-	console.log(currentWord);
 	const wrongGuessCount = guessedLetters.filter(
 		(letter: string): boolean => !currentWord.includes(letter),
 	).length;
@@ -19,7 +19,7 @@ function App(): JSX.Element {
 	const isGameLost = wrongGuessCount >= languages.length - 1;
 	const isGameOver = isGameWon || isGameLost;
 	const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
-	const isLastGuessIncorrect =
+	const isLastGuessIncorrect: boolean | string =
 		lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
 	const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -97,45 +97,6 @@ function App(): JSX.Element {
 		);
 	});
 
-	function renderGameStatus(): JSX.Element {
-		const sectionClass = clsx(
-			"flex h-15 w-full max-w-87.5 flex-col items-center justify-center rounded-sm",
-			isLastGuessIncorrect
-				? "border border-[#323232] border-dashed bg-[#7A5EA7]"
-				: !isGameOver
-					? ""
-					: isGameWon
-						? "bg-[#10A95B]"
-						: "bg-[#BA2A2A]",
-		);
-
-		const paragraphClassName = clsx(
-			"font-medium text-[#F9F4DA]",
-			isLastGuessIncorrect && "italic",
-		);
-
-		return (
-			<section className={sectionClass}>
-				{isGameOver ? (
-					<>
-						<h2 className="font-medium text-[#F9F4DA] text-xl">
-							{isGameWon ? "You Win!" : "Game over!"}
-						</h2>
-						<p className={paragraphClassName}>
-							{isGameWon
-								? "Well done! 🎉"
-								: "You lose! Better start learning Assembly 😭"}
-						</p>
-					</>
-				) : isLastGuessIncorrect ? (
-					<p className={paragraphClassName}>
-						"{getFarewellText(lastGuessedLetter)}"
-					</p>
-				) : null}
-			</section>
-		);
-	}
-
 	function startNewGame(): void {
 		setCurrentWord(getRandomWord());
 		setGuessedLetters([]);
@@ -145,7 +106,12 @@ function App(): JSX.Element {
 		<main className="flex flex-col items-center gap-9">
 			{isGameWon && <Confetti recycle={false} numberOfPieces={1000} />}
 			<Header />
-			{renderGameStatus()}
+			<GameStatus
+				isGameWon={isGameWon}
+				isGameOver={isGameOver}
+				isLastGuessIncorrect={isLastGuessIncorrect}
+				wrongGuessCount={wrongGuessCount}
+			/>
 			<section className="flex max-w-87.5 flex-wrap justify-center gap-0.5">
 				{languageElements}
 			</section>
