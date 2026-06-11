@@ -5,9 +5,12 @@ import { languages } from "./languages";
 
 function App(): JSX.Element {
 	const [currentWord, setCurrentWord] = React.useState<string>("react");
-
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
-	console.log(guessedLetters);
+
+	const wrongGuessCount = guessedLetters.filter(
+		(letter: string): boolean => !currentWord.includes(letter),
+	).length;
+
 	const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 	function addGuessedLetter(letter: string): void {
@@ -16,16 +19,23 @@ function App(): JSX.Element {
 		);
 	}
 
-	const languageElements = languages.map((language): JSX.Element => {
+	const languageElements = languages.map((language, index): JSX.Element => {
+		const isLanguageLost = index < wrongGuessCount;
+
 		const styles = {
 			backgroundColor: language.backgroundColor,
 			color: language.color,
 		};
+
 		return (
 			<span
 				key={language.name}
 				style={styles}
-				className="rounded-sm p-1 font-bold text-xs"
+				className={clsx(
+					"relative rounded-sm p-1 font-bold text-xs",
+					isLanguageLost &&
+						"before:absolute before:inset-0 before:flex before:items-center before:justify-center before:rounded-[inherit] before:bg-black/70 before:content-['💀']",
+				)}
 			>
 				{language.name}
 			</span>
