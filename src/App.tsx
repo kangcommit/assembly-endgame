@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { type JSX } from "react";
 import Confetti from "react-confetti";
-import Header from "./Header";
+import Header from "./components/Header";
 import { languages } from "./languages";
 import { getFarewellText, getRandomWord } from "./utils";
 
