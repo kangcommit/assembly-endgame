@@ -3,6 +3,7 @@ import React, { type JSX } from "react";
 import ConfettiContainer from "./components/ConfettiContainer";
 import GameStatus from "./components/GameStatus";
 import Header from "./components/Header";
+import LanguageChips from "./components/LanguageChips";
 import { languages } from "./languages";
 import { getRandomWord } from "./utils";
 
@@ -10,7 +11,6 @@ function App(): JSX.Element {
 	const [currentWord, setCurrentWord] = React.useState<string>(getRandomWord());
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
 
-	console.log(currentWord);
 	const wrongGuessCount = guessedLetters.filter(
 		(letter: string): boolean => !currentWord.includes(letter),
 	).length;
@@ -107,15 +107,16 @@ function App(): JSX.Element {
 		<main className="flex flex-col items-center gap-9">
 			<ConfettiContainer isGameWon={isGameWon} />
 			<Header />
+
 			<GameStatus
 				isGameWon={isGameWon}
 				isGameOver={isGameOver}
 				isLastGuessIncorrect={isLastGuessIncorrect}
 				wrongGuessCount={wrongGuessCount}
 			/>
-			<section className="flex max-w-87.5 flex-wrap justify-center gap-0.5">
-				{languageElements}
-			</section>
+
+			<LanguageChips wrongGuessCount={wrongGuessCount} />
+
 			<section className="flex justify-center gap-0.5">
 				{letterElements}
 			</section>
