@@ -14,8 +14,8 @@ function App(): JSX.Element {
 	const isGameWon = currentWord
 		.split("")
 		.every((letter) => guessedLetters.includes(letter));
-	const isLost = wrongGuessCount >= languages.length - 1;
-	const isGameOver = isGameWon || isLost;
+	const isGameLost = wrongGuessCount >= languages.length - 1;
+	const isGameOver = isGameWon || isGameLost;
 	const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
 	const isLastGuessIncorrect =
 		lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
@@ -51,18 +51,24 @@ function App(): JSX.Element {
 		);
 	});
 
-	const letterElements = currentWord.split("").map(
-		(char, index): JSX.Element => (
+	const letterElements = currentWord.split("").map((char, index) => {
+		const isGuessed = guessedLetters.includes(char);
+		const shouldRevealLetter = isGameLost || isGuessed;
+
+		return (
 			<span
 				// TODO: Consider using a unique identifier for each letter instead of index for keys in production code
 				// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-				key={index}
-				className="flex h-10 w-10 items-center justify-center border-b border-b-[#F9F4DA] bg-[#323232] font-bold text-[#F9F4DA] text-lg uppercase"
+				key={`${char}-${index}`}
+				className={clsx(
+					"flex h-10 w-10 items-center justify-center border-b border-b-[#F9F4DA] bg-[#323232] font-bold text-lg uppercase",
+					!isGuessed ? "text-[#EC5D49]" : "text-[#F9F4DA]",
+				)}
 			>
-				{guessedLetters.includes(char) ? char : ""}
+				{shouldRevealLetter ? char : ""}
 			</span>
-		),
-	);
+		);
+	});
 
 	const keyboardElement = alphabet.split("").map((letter): JSX.Element => {
 		const isGuessed = guessedLetters.includes(letter);
