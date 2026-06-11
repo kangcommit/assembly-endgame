@@ -4,6 +4,7 @@ import GameStatus from "./components/GameStatus";
 import Header from "./components/Header";
 import Keyboard from "./components/Keyboard";
 import LanguageChips from "./components/LanguageChips";
+import NewGameButton from "./components/NewGameButton";
 import WordLetter from "./components/WordLetter";
 import { languages } from "./languages";
 import { getRandomWord } from "./utils";
@@ -64,15 +65,7 @@ function App(): JSX.Element {
 				addGuessedLetter={addGuessedLetter}
 			/>
 
-			{isGameOver && (
-				<button
-					type="button"
-					onClick={startNewGame}
-					className="w-56.25 cursor-pointer rounded-sm border border-[#D7D7D7] bg-[#11B5E5] py-2 font-semibold text-[#1E1E1E]"
-				>
-					New Game
-				</button>
-			)}
+			<NewGameButton isGameOver={isGameOver} startNewGame={startNewGame} />
 		</main>
 	);
 }
