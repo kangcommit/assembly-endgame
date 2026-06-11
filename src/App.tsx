@@ -9,22 +9,25 @@ import { languages } from "./languages";
 import { getRandomWord } from "./utils";
 
 function App(): JSX.Element {
+	// State values
 	const [currentWord, setCurrentWord] = React.useState<string>(getRandomWord());
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
 
-	const wrongGuessCount = guessedLetters.filter(
+	// Derived values
+	const wrongGuessCount: number = guessedLetters.filter(
 		(letter: string): boolean => !currentWord.includes(letter),
 	).length;
-	const isGameWon = currentWord
+	const isGameWon: boolean = currentWord
 		.split("")
 		.every((letter) => guessedLetters.includes(letter));
-	const isGameLost = wrongGuessCount >= languages.length - 1;
-	const isGameOver = isGameWon || isGameLost;
-	const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
+	const isGameLost: boolean = wrongGuessCount >= languages.length - 1;
+	const isGameOver: boolean = isGameWon || isGameLost;
+	const lastGuessedLetter: string = guessedLetters[guessedLetters.length - 1];
 	const isLastGuessIncorrect: boolean | string =
 		lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
-	const alphabet = "abcdefghijklmnopqrstuvwxyz";
+	// Static values
+	const alphabet: string = "abcdefghijklmnopqrstuvwxyz";
 
 	function addGuessedLetter(letter: string): void {
 		setGuessedLetters((prevLetters) =>
