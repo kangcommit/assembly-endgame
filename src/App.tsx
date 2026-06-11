@@ -10,6 +10,11 @@ function App(): JSX.Element {
 	const wrongGuessCount = guessedLetters.filter(
 		(letter: string): boolean => !currentWord.includes(letter),
 	).length;
+	const isGameWon = currentWord
+		.split("")
+		.every((letter) => guessedLetters.includes(letter));
+	const isLost = wrongGuessCount >= languages.length - 1;
+	const isGameOver = isGameWon || isLost;
 
 	const alphabet = "abcdefghijklmnopqrstuvwxyz";
 
@@ -82,9 +87,24 @@ function App(): JSX.Element {
 	return (
 		<main className="flex flex-col items-center gap-9">
 			<Header />
-			<section className="mt-5 flex w-full max-w-87.5 flex-col items-center rounded-sm bg-[#10A95B] py-1.5">
-				<h2 className="font-medium text-[#F9F4DA] text-xl">You Win!</h2>
-				<p className="font-medium text-[#F9F4DA]">Well done! 🎉</p>
+			<section
+				className={clsx(
+					"flex h-15 w-full max-w-87.5 flex-col items-center justify-center rounded-sm",
+					!isGameOver ? "" : isGameWon ? "bg-[#10A95B]" : "bg-[#BA2A2A]",
+				)}
+			>
+				{isGameOver ? (
+					<>
+						<h2 className="font-medium text-[#F9F4DA] text-xl">
+							{isGameWon ? "You Win!" : "Game over!"}
+						</h2>
+						<p className="font-medium text-[#F9F4DA]">
+							{isGameWon
+								? "Well done! 🎉"
+								: "You lose! Better start learning Assembly 😭"}
+						</p>
+					</>
+				) : null}
 			</section>
 			<section className="flex max-w-87.5 flex-wrap justify-center gap-0.5">
 				{languageElements}
@@ -95,12 +115,14 @@ function App(): JSX.Element {
 			<section className="flex max-w-120 flex-wrap justify-center gap-2">
 				{keyboardElement}
 			</section>
-			<button
-				type="button"
-				className="w-56.25 rounded-sm border border-[#D7D7D7] bg-[#11B5E5] py-2 font-semibold text-[#1E1E1E]"
-			>
-				New Game
-			</button>
+			{isGameOver && (
+				<button
+					type="button"
+					className="w-56.25 rounded-sm border border-[#D7D7D7] bg-[#11B5E5] py-2 font-semibold text-[#1E1E1E]"
+				>
+					New Game
+				</button>
+			)}
 		</main>
 	);
 }
