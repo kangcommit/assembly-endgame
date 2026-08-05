@@ -28,6 +28,8 @@ function Keyboard({
 					key={letter}
 					type="button"
 					disabled={isGameOver}
+					aria-disabled={guessedLetters.includes(letter)}
+					aria-label={`Letter ${letter}`}
 					onClick={() => addGuessedLetter(letter)}
 					className={clsx(
 						"flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm border border-[#D7D7D7] font-semibold text-[#1E1E1E] uppercase disabled:cursor-not-allowed disabled:opacity-50",

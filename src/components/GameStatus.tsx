@@ -33,7 +33,7 @@ function GameStatus({
 	);
 
 	return (
-		<section className={sectionClass}>
+		<section aria-live="polite" role="status" className={sectionClass}>
 			{isGameOver ? (
 				<>
 					<h2 className="font-medium text-[#F9F4DA] text-xl">

@@ -15,13 +15,14 @@ function App(): JSX.Element {
 	const [guessedLetters, setGuessedLetters] = React.useState<string[]>([]);
 
 	// Derived values
+	const numberGuessesLeft = languages.length - 1;
 	const wrongGuessCount: number = guessedLetters.filter(
 		(letter: string): boolean => !currentWord.includes(letter),
 	).length;
 	const isGameWon: boolean = currentWord
 		.split("")
 		.every((letter: string): boolean => guessedLetters.includes(letter));
-	const isGameLost: boolean = wrongGuessCount >= languages.length - 1;
+	const isGameLost: boolean = wrongGuessCount >= numberGuessesLeft;
 	const isGameOver: boolean = isGameWon || isGameLost;
 	const lastGuessedLetter: string = guessedLetters[guessedLetters.length - 1];
 	const isLastGuessIncorrect: boolean | string =
@@ -57,6 +58,25 @@ function App(): JSX.Element {
 				guessedLetters={guessedLetters}
 				isGameLost={isGameLost}
 			/>
+
+			{/* Combined visually-hidden aria-live region for status updates */}
+			<section className="sr-only" aria-live="polite" role="status">
+				<p>
+					{currentWord.includes(lastGuessedLetter)
+						? `Correct! The letter ${lastGuessedLetter} in the word.`
+						: `Sorry, the letter ${lastGuessedLetter} is not in the word.`}
+					Upi jave {numberGuessesLeft} attempts left.
+				</p>
+				<p>
+					Current word:{" "}
+					{currentWord
+						.split("")
+						.map((letter) =>
+							guessedLetters.includes(letter) ? `${letter}.` : "blank",
+						)
+						.join(" ")}
+				</p>
+			</section>
 
 			<Keyboard
 				guessedLetters={guessedLetters}
